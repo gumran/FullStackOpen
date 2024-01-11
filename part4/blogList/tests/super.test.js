@@ -104,6 +104,21 @@ test('update requests work correctly', async () => {
   expect(response.body.likes).toBe(1)
 }, 100000)
 
+test('update without token fails', async () => {
+  const id = (await api.get('/api/blogs')).body[1].id
+  console.log(id)
+  const tempBlog = {
+    title: 'test',
+    author: 'test',
+    url: 'test',
+    likes: 1
+  }
+  const response = await api
+    .put(`/api/blogs/${id}`)
+    .send(tempBlog)
+  expect(response.status).toBe(401)
+}, 100000)
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
